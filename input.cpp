@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "functions.h"
+#include "structures.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ void writeEntry(HANDLE hFile, Entry newEntry)
 	WriteFile(hFile, reinterpret_cast<const char*>(&newEntry), sizeof(Entry), NULL, NULL);
 }
 
-bool findKey(HANDLE hFile, char* key)
+bool findKey(HANDLE hFile, TCHAR* key)
 {
 	bool result = false;
 	int position = 0;
@@ -27,7 +28,7 @@ bool findKey(HANDLE hFile, char* key)
 		}
 		ReadFile(hFile, (char*)(buffer), sizeof(Entry), NULL, NULL);
 
-		if (!strcmp(buffer->key, key)) {
+		if (!lstrcmp(buffer->key, key)) {
 			result = true;
 			break;
 		}

@@ -1,9 +1,10 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #include "functions.h"
+#include "structures.h"
 using namespace std;
 
-void changeSelection(HANDLE hFile, char* key)
+void changeSelection(HANDLE hFile, TCHAR* key)
 {
 	Entry newEntry;
 	readEntry(hFile, key, newEntry);

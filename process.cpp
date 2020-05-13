@@ -1,4 +1,6 @@
+#pragma once
 #include "functions.h"
+#include "structures.h"
 
 void findMostPopular(HANDLE hFile, vector<Animal>& animals)
 {
@@ -15,12 +17,12 @@ void findMostPopular(HANDLE hFile, vector<Animal>& animals)
 	animals = getMostPopular(&animals);
 }
 
-bool findAnimalInList(char* animal, vector<Animal>* animals)
+bool findAnimalInList(TCHAR* animal, vector<Animal>* animals)
 {
 	if (animals->size() > 0) {
 		for (int i = 0; i < animals->size(); i++)
 		{
-			if (strcmp(animals->at(i).animal, animal) == 0)
+			if (lstrcmp(animals->at(i).animal, animal) == 0)
 			{
 				animals->at(i).amount++;
 				return true;
@@ -38,19 +40,19 @@ vector<Animal> addEntry(Entry entry, vector<Animal> animals)
 
 	if (!findAnimalInList(entry.firstAnimal, &animals))
 	{
-		strcpy(newAnimal.animal, entry.firstAnimal);
+		lstrcpy(newAnimal.animal, entry.firstAnimal);
 		(&animals)->push_back(newAnimal);
 	}
 
 	if (!findAnimalInList(entry.secondAnimal, &animals))
 	{
-		strcpy(newAnimal.animal, entry.secondAnimal);
+		lstrcpy(newAnimal.animal, entry.secondAnimal);
 		(&animals)->push_back(newAnimal);
 	}
 
 	if (!findAnimalInList(entry.thirdAnimal, &animals))
 	{
-		strcpy(newAnimal.animal, entry.thirdAnimal);
+		lstrcpy(newAnimal.animal, entry.thirdAnimal);
 		(&animals)->push_back(newAnimal);
 	}
 

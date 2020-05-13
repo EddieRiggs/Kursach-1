@@ -1,9 +1,11 @@
+#pragma once
 #include "functions.h"
+#include "structures.h"
 #include <tchar.h>
 
 void deleteSelectedEntries(HANDLE &hFile, TCHAR* fileName) {
 	HANDLE temp = CreateFile(
-		"temp.bin",
+		L"temp.bin",
 		GENERIC_WRITE | GENERIC_READ,
 		NULL,
 		NULL,
@@ -25,7 +27,7 @@ void deleteSelectedEntries(HANDLE &hFile, TCHAR* fileName) {
 	CloseHandle(hFile);
 	CloseHandle(temp);
 	DeleteFile(fileName);
-	MoveFile("temp.bin", fileName);
+	MoveFile(L"temp.bin", fileName);
 	hFile = CreateFile(
 		fileName,
 		GENERIC_READ | GENERIC_WRITE,

@@ -5,44 +5,56 @@
 #include <string>
 #include <iomanip>
 #include "functions.h"
+#include "structures.h"
 #include <vector>
 #include <sstream>
+#include <tchar.h>
 
 using namespace std;
 
 TCHAR* header()
 {
-	stringstream ss;
-	ss << setw(10) << "Ключ" << setw(10) << "Возраст"
-		<< setw(20) << "Первое животное" << setw(20) << "Второе животное"
-		<< setw(20) << "Третье животное" << setw(12) << "На удаление";
-	char str[MAX_PATH];
-	strcpy(str, ss.str().c_str());
+
+	TCHAR str[MAX_PATH];
+	swprintf_s(
+		str,
+		TEXT("%10s|%10s|%20s|%20s|%20s|%12s"),
+		L"Ключ",
+		L"Возраст",
+		L"Первое животное",
+		L"Второе животное",
+		L"Третье животное",
+		L"На удаление");
 	return str;
 }
 
 TCHAR* entryToString(Entry entry)
 {
-	stringstream ss;
-	ss << setw(10) << entry.key << setw(10) << entry.age
-		<< setw(20) << entry.firstAnimal << setw(20) << entry.secondAnimal
-		<< setw(20) << entry.thirdAnimal << setw(12) << (entry.toDelete ? "да" : "нет");
-	char str[MAX_PATH];
-	strcpy(str, ss.str().c_str());
+	TCHAR str[MAX_PATH];
+	swprintf_s(
+		str,
+		TEXT("%10s|%10i|%20s|%20s|%20s|%12s"),
+		entry.key,
+		entry.age,
+		entry.firstAnimal,
+		entry.secondAnimal,
+		entry.thirdAnimal,
+		(entry.toDelete ? L"да" : L"нет"));
 	return str;
 }
 
 TCHAR* animalToString(Animal animal)
 {
-	stringstream ss;
-	ss << animal.amount << " раз встретилось \""
-		<< animal.animal << "\";" << endl;
-	char str[120];
-	strcpy(str, ss.str().c_str());
+	TCHAR str[120];
+	swprintf_s(
+		str,
+		L"%i раз встретилось \"%s\"",
+		animal.amount,
+		animal.animal);
 	return str;
 }
 
-void readEntry(HANDLE hFile, char* key, Entry& entry)
+void readEntry(HANDLE hFile, TCHAR* key, Entry& entry)
 {
 	if (findKey(hFile, key)) {
 		SetFilePointer(hFile, -(int)sizeof(Entry), NULL, FILE_CURRENT);
@@ -57,8 +69,9 @@ void readAll(HANDLE hFile, vector<Entry>* entriesList)
 
 	while (true) {
 		DWORD pointer = SetFilePointer(hFile, position * sizeof(Entry), NULL, FILE_BEGIN);
+		DWORD size = GetFileSize(hFile, NULL);
 
-		if (pointer == GetFileSize(hFile, NULL)) {
+		if (pointer == size) {
 			break;
 		}
 

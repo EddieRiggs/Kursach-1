@@ -162,7 +162,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_DELETE: // удалить помеченные
                 deleteSelectedEntries(hFile, path);
-                MessageBox(hWnd, "Записи удалены", "Успех", MB_ICONINFORMATION);
+                MessageBox(hWnd, L"Записи удалены", L"Успех", MB_ICONINFORMATION);
                 break;
             case ID_SHOWALL: // все записи
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_TABLEOUTPUT), hWnd, ShowAll);
@@ -248,16 +248,16 @@ INT_PTR CALLBACK EditEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             Entry foundEntry = { 0 };
             if (!hFile == NULL) {
                 readEntry(hFile, buf, foundEntry);
-                if (strcmp(buf, foundEntry.key) == 0) {
+                if (lstrcmp(buf, foundEntry.key) == 0) {
                     SetDlgItemText(hDlg, IDC_FIRSTANIMALEDITOR, foundEntry.firstAnimal);
                     SetDlgItemText(hDlg, IDC_SECONDANIMALEDITOR, foundEntry.secondAnimal);
                     SetDlgItemText(hDlg, IDC_THIRDANIMALEDITOR, foundEntry.thirdAnimal);
-                    _itoa(foundEntry.age, buf, 10);
+                    _itoa(foundEntry.age, (char *)buf, 10);
                     SetDlgItemText(hDlg, IDC_AGEEDITOR, buf);
                 }
             }
             else {
-                MessageBox(hDlg, "Файл не загружен", "Ошибка", MB_ICONERROR | MB_OK);
+                MessageBox(hDlg, L"Файл не загружен", L"Ошибка", MB_ICONERROR | MB_OK);
             }
             break;
         }
@@ -266,14 +266,14 @@ INT_PTR CALLBACK EditEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             Entry newEntry = { 0 };
             TCHAR buf[20];
             GetDlgItemText(hDlg, IDC_AGEEDITOR, buf, 20);
-            newEntry.age = atoi(buf);
+            newEntry.age = _ttoi(buf);
             GetDlgItemText(hDlg, IDC_FIRSTANIMALEDITOR, newEntry.firstAnimal, 20);
             GetDlgItemText(hDlg, IDC_SECONDANIMALEDITOR, newEntry.secondAnimal, 20);
             GetDlgItemText(hDlg, IDC_THIRDANIMALEDITOR, newEntry.thirdAnimal, 20);
-            if (strcmp(newEntry.firstAnimal, newEntry.secondAnimal) == 0 ||
-                strcmp(newEntry.thirdAnimal, newEntry.secondAnimal) == 0 ||
-                strcmp(newEntry.firstAnimal, newEntry.thirdAnimal) == 0) {
-                MessageBox(hDlg, "Не может быть одинаковых животных", "Предупреждение", MB_ICONEXCLAMATION);
+            if (lstrcmp(newEntry.firstAnimal, newEntry.secondAnimal) == 0 ||
+                lstrcmp(newEntry.thirdAnimal, newEntry.secondAnimal) == 0 ||
+                lstrcmp(newEntry.firstAnimal, newEntry.thirdAnimal) == 0) {
+                MessageBox(hDlg, L"Не может быть одинаковых животных", L"Предупреждение", MB_ICONEXCLAMATION);
             }
             else {
                 GetDlgItemText(hDlg, IDC_KEYENTEREDITOR, newEntry.key, 20);
@@ -319,12 +319,12 @@ INT_PTR CALLBACK SearchForEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             Entry foundEntry = { 0 };
             if (!hFile == NULL) {
                 readEntry(hFile, key, foundEntry);
-                if (strcmp(key, foundEntry.key) == 0) {
-                    SetDlgItemText(hDlg, IDC_TODELETE, foundEntry.toDelete ? "да" : "нет");
+                if (lstrcmp(key, foundEntry.key) == 0) {
+                    SetDlgItemText(hDlg, IDC_TODELETE, (foundEntry.toDelete ? L"да" : L"нет"));
                 }
             }
             else {
-                MessageBox(hDlg, "Файл не загружен", "Ошибка", MB_ICONERROR | MB_OK);
+                MessageBox(hDlg, L"Файл не загружен", L"Ошибка", MB_ICONERROR | MB_OK);
             }
             break;
         }
@@ -338,18 +338,18 @@ INT_PTR CALLBACK SearchForEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             Entry foundEntry = { 0 };
             if (!hFile == NULL) {
                 readEntry(hFile, buf, foundEntry);
-                if (strcmp(buf, foundEntry.key) == 0) {
+                if (lstrcmp(buf, foundEntry.key) == 0) {
                     SetDlgItemText(hDlg, IDC_KEYEDIT, foundEntry.key);
                     SetDlgItemText(hDlg, IDC_FIRSTANIMALEDIT, foundEntry.firstAnimal);
                     SetDlgItemText(hDlg, IDC_SECONDANIMALEDIT, foundEntry.secondAnimal);
                     SetDlgItemText(hDlg, IDC_THIRDANIMALEDIT, foundEntry.thirdAnimal);
-                    _itoa(foundEntry.age, buf, 10);
+                    _itot(foundEntry.age, buf, 10);
                     SetDlgItemText(hDlg, IDC_AGEEDIT, buf);
-                    SetDlgItemText(hDlg, IDC_TODELETE, foundEntry.toDelete ? "да" : "нет");
+                    SetDlgItemText(hDlg, IDC_TODELETE, (foundEntry.toDelete ? L"да" : L"нет"));
                 }
             }
             else {
-                MessageBox(hDlg, "Файл не загружен", "Ошибка", MB_ICONERROR | MB_OK);
+                MessageBox(hDlg, L"Файл не загружен", L"Ошибка", MB_ICONERROR | MB_OK);
             }
             break;
         }
@@ -368,30 +368,29 @@ INT_PTR CALLBACK ShowAll(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
     {
         HWND hWndList = GetDlgItem(hDlg, IDC_LIST);
-        SetDlgItemText(hDlg, IDD_TABLEOUTPUT, "Все записи");
         TCHAR str[MAX_PATH];
         HFONT hFont = CreateFont(
-            12,
-            2,
+            15,
             0,
             0,
-            FW_NORMAL,
-            FALSE,
-            FALSE,
-            FALSE,
+            0,
+            0,
+            0,
+            0,
+            0,
             DEFAULT_CHARSET,
-            OUT_DEFAULT_PRECIS,
-            CLIP_DEFAULT_PRECIS,
-            DEFAULT_QUALITY,
-            VARIABLE_PITCH,
-            "Courier");
+            0,
+            0,
+            0, 
+            0,
+            _T("Consolas"));
         SendMessage(hWndList, WM_SETFONT, (WPARAM)hFont, TRUE);
         vector<Entry> entries;
         readAll(hFile, &entries);
-        strcpy(str, header());
+        lstrcpy(str, header());
         SendMessage(hWndList, LB_ADDSTRING, 0, (LPARAM)str);
         for (Entry entry : entries) {
-            strcpy(str, entryToString(entry));
+            lstrcpy(str, entryToString(entry));
             SendMessage(hWndList, LB_ADDSTRING, 0, (LPARAM)str);
         }
         return (INT_PTR)TRUE;
@@ -413,27 +412,28 @@ INT_PTR CALLBACK GetTop(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
     {
         HWND hWndList = GetDlgItem(hDlg, IDC_LIST);
-        SetDlgItemText(hDlg, IDD_TABLEOUTPUT, "Самые популярные животные");
         HFONT hFont = CreateFont(
-            12,
-            2,
+            15,
             0,
             0,
-            FW_NORMAL,
-            FALSE,
-            FALSE,
-            FALSE,
+            0,
+            0,
+            0,
+            0,
+            0,
             DEFAULT_CHARSET,
-            OUT_DEFAULT_PRECIS,
-            CLIP_DEFAULT_PRECIS,
-            DEFAULT_QUALITY,
-            VARIABLE_PITCH,
-            "Courier");
+            0,
+            0,
+            0,
+            0,
+            _T("Consolas"));
         SendMessage(hWndList, WM_SETFONT, (WPARAM)hFont, TRUE);
         vector<Animal> entries;
         findMostPopular(hFile, entries);
+        TCHAR str[MAX_PATH];
         for (Animal animal : entries) {
-            SendMessage(hWndList, LB_ADDSTRING, 0, (LPARAM)animalToString(animal));
+            lstrcpy(str, animalToString(animal));
+            SendMessage(hWndList, LB_ADDSTRING, 0, (LPARAM)str);
         }
         return (INT_PTR)TRUE;
     }
@@ -473,7 +473,7 @@ INT_PTR CALLBACK OpenFile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 FILE_ATTRIBUTE_NORMAL,
                 NULL);
             if (hFile == INVALID_HANDLE_VALUE) {
-                MessageBox(hDlg, "Не удалось открыть файл", "Ошибка", MB_ICONERROR | MB_OK);
+                MessageBox(hDlg, L"Не удалось открыть файл", L"Ошибка", MB_ICONERROR | MB_OK);
             }
             
             EndDialog(hDlg, LOWORD(wParam));
@@ -509,15 +509,15 @@ INT_PTR CALLBACK AddEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             Entry newEntry = { 0 };
             TCHAR buff[20];
             GetDlgItemText(hDlg, IDC_AGE, buff, 20);
-            newEntry.age = atoi(buff);
+            newEntry.age = _ttoi(buff);
             GetDlgItemText(hDlg, IDC_FIRSTANIMAL, newEntry.firstAnimal, 20);
             GetDlgItemText(hDlg, IDC_SECONDANIMAL, newEntry.secondAnimal, 20);
             GetDlgItemText(hDlg, IDC_THIRDANIMAL, newEntry.thirdAnimal, 20);
             GetDlgItemText(hDlg, IDC_KEYENTER, newEntry.key, 20);
-            if (strcmp(newEntry.firstAnimal, newEntry.secondAnimal) == 0 ||
-                strcmp(newEntry.thirdAnimal, newEntry.secondAnimal) == 0 ||
-                strcmp(newEntry.firstAnimal, newEntry.thirdAnimal) == 0) {
-                MessageBox(hDlg, "Не может быть одинаковых животных", "Предупреждение", MB_ICONEXCLAMATION);
+            if (lstrcmp(newEntry.firstAnimal, newEntry.secondAnimal) == 0 ||
+                lstrcmp(newEntry.thirdAnimal, newEntry.secondAnimal) == 0 ||
+                lstrcmp(newEntry.firstAnimal, newEntry.thirdAnimal) == 0) {
+                MessageBox(hDlg, L"Не может быть одинаковых животных", L"Предупреждение", MB_ICONEXCLAMATION);
             }
             else {
                 writeEntry(hFile, newEntry);
@@ -539,7 +539,7 @@ INT_PTR CALLBACK AddEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBitmap)
 {
-    HBITMAP hbm, hOldbm;
+    HBITMAP hOldbm;
     HDC hMemDC;
     BITMAP bm;
     POINT ptSize, ptOrg;

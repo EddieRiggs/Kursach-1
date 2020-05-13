@@ -1,8 +1,10 @@
+#pragma once
 #include "functions.h"
+#include "structures.h"
 
 using namespace std;
 
-void editEntry(HANDLE hFile, char* key, Entry newEntry)
+void editEntry(HANDLE hFile, TCHAR* key, Entry newEntry)
 {
 	Entry entry;
 	if (findKey(hFile, key)) {
