@@ -22,6 +22,7 @@
 #define IDD_TABLEOUTPUT                 136
 #define IDB_BITMAP1                     139
 #define IDB_BITMAP2                     141
+#define IDB_ROZHA                       141
 #define IDC_AGE                         1000
 #define IDC_AGETEXT                     1001
 #define IDC_FIRSTANIMAL                 1002
@@ -60,6 +61,8 @@
 #define IDCLOSETABLE                    1037
 #define IDC_LIST                        1038
 #define IDB_PICTURE                     1040
+#define IDC_                            1041
+#define IDC_PICTURE                     1041
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -93,7 +96,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        142
 #define _APS_NEXT_COMMAND_VALUE         32795
-#define _APS_NEXT_CONTROL_VALUE         1041
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

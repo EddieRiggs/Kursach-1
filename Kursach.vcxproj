@@ -169,8 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="1.bmp" />
-    <Image Include="bitmap1.bmp" />
-    <Image Include="bitmap2.bmp" />
     <Image Include="Kursach.ico" />
     <Image Include="small.ico" />
   </ItemGroup>

@@ -69,13 +69,7 @@
     <Image Include="Kursach.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="bitmap1.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
     <Image Include="1.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="bitmap2.bmp">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
