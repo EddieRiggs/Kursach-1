@@ -513,15 +513,25 @@ INT_PTR CALLBACK AddEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             GetDlgItemText(hDlg, IDC_SECONDANIMAL, newEntry.secondAnimal, 20);
             GetDlgItemText(hDlg, IDC_THIRDANIMAL, newEntry.thirdAnimal, 20);
             GetDlgItemText(hDlg, IDC_KEYENTER, newEntry.key, 20);
-            if (lstrcmp(newEntry.firstAnimal, newEntry.secondAnimal) == 0 ||
-                lstrcmp(newEntry.thirdAnimal, newEntry.secondAnimal) == 0 ||
-                lstrcmp(newEntry.firstAnimal, newEntry.thirdAnimal) == 0) {
-                MessageBox(hDlg, L"Не может быть одинаковых животных", L"Предупреждение", MB_ICONEXCLAMATION);
+            if (lstrcmp(newEntry.key, L"\0") == 0) {
+                MessageBox(hDlg, L"Ключ не может быть пустым", L"Предупреждение", MB_ICONEXCLAMATION);
             }
             else {
-                writeEntry(hFile, newEntry);
-                EndDialog(hDlg, LOWORD(wParam));
-                return (INT_PTR)TRUE;
+                if (findKey(hFile, newEntry.key)) {
+                    MessageBox(hDlg, L"Запись с таким ключом уже существует", L"Предупреждение", MB_ICONEXCLAMATION);
+                }
+                else {
+                    if (lstrcmp(newEntry.firstAnimal, newEntry.secondAnimal) == 0 ||
+                        lstrcmp(newEntry.thirdAnimal, newEntry.secondAnimal) == 0 ||
+                        lstrcmp(newEntry.firstAnimal, newEntry.thirdAnimal) == 0) {
+                        MessageBox(hDlg, L"Не может быть одинаковых животных", L"Предупреждение", MB_ICONEXCLAMATION);
+                    }
+                    else {
+                        writeEntry(hFile, newEntry);
+                        EndDialog(hDlg, LOWORD(wParam));
+                        return (INT_PTR)TRUE;
+                    }
+                }
             }
             break;
         }
