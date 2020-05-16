@@ -251,7 +251,7 @@ INT_PTR CALLBACK EditEntry(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
                     SetDlgItemText(hDlg, IDC_FIRSTANIMALEDITOR, foundEntry.firstAnimal);
                     SetDlgItemText(hDlg, IDC_SECONDANIMALEDITOR, foundEntry.secondAnimal);
                     SetDlgItemText(hDlg, IDC_THIRDANIMALEDITOR, foundEntry.thirdAnimal);
-                    _itoa(foundEntry.age, (char *)buf, 10);
+                    _itot(foundEntry.age, buf, 10);
                     SetDlgItemText(hDlg, IDC_AGEEDITOR, buf);
                 }
             }
